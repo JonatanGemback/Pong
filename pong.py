@@ -1,15 +1,15 @@
 from cmu_graphics import *
 from cmu_graphics.cmu_graphics import *
 
-app.stepsPerSecond = 60
-#Bakgrunden
-app.background = 'black'
+leftPaddle: Line
+rightPaddle: Line
+ball_speed_X: int
+ball_speed_Y: int
+leftScore: Label
+rightScore: Label
+ball: Circle
 
-#Planen
-Rect(10, 10, 5, 480, fill='white')
-Rect(685, 10, 5, 480, fill='white')
-Rect(10, 10, 680, 5, fill='white')
-Rect(10, 485, 680, 5, fill='white')
+
 
 #Startmeny
 visible = True
@@ -32,25 +32,6 @@ visible = True
 #     return visible, meny
 
 
-#Mittenlinje
-Line(350.5, 10, 350.5, 485, lineWidth=5, dashes=True, fill='white', visible=visible)
-
-#Paddlarna
-leftPaddle = Line(35, 200, 35, 300, lineWidth=10, fill='white', visible=visible)
-rightPaddle = Line(665, 200, 665, 300, lineWidth=10, fill='white', visible=visible)
-
-#Bollen
-ball_X = 350
-ball_Y = 250
-ball = Circle(ball_X, ball_Y, 8, fill='white', visible=visible)
-
-#Bollens hastighet
-ball_speed_X = -1
-ball_speed_Y = -1
-
-#Score
-leftScore = Label(0, 180, 50, size=30, fill='white', visible=visible)
-rightScore = Label(0, 520, 50, size=30, fill='white', visible=visible)
 
 
 #Röra paddlarna
@@ -70,16 +51,10 @@ def onKeyHold(key):
 
 
 def onStep():
-    global ball_X
-    global ball_Y
-    global ball_speed_X
-    global ball_speed_Y
+    global ball_speed_X, ball_speed_Y, ball
 
-    ball_X -= ball_speed_X
-    ball_Y += ball_speed_Y
-
-    ball.centerX = ball_X
-    ball.centerY = ball_Y
+    ball.centerX -= ball_speed_X
+    ball.centerY += ball_speed_Y
 
     if ball.centerY >= 480 or ball.centerY <= 20:
         ball_speed_Y *= -1
@@ -93,15 +68,58 @@ def onStep():
 
     if ball.centerX >= 685:
         updateScore('leftScoreLabel')
+    elif ball.centerXq <= 15:
+        updateScore('rightScoreLabel')
+
+def centerBoll():
+    return Circle(350, 250, 8, fill='white', visible=visible)
 
 
 def updateScore(score):
+    global ball
+    ball.visible = False
+    ball = centerBoll()
+
     if score == 'leftScoreLabel':
-        leftScore.value = int(leftScore.value) + 1
-        ball_X = 350
-        ball_Y = 250
-        ball.centerX = ball_X
-        ball.centerY = ball_Y
+        leftScore.value += 1
+    elif score == 'rightScoreLabel':
+        rightScore.value += 1
+
+
+def init():
+    app.stepsPerSecond = 60
+
+    global leftPaddle, rightPaddle, ball_speed_X, ball_speed_Y, leftScore, rightScore, ball
+
+    #Bakgrunden
+    app.background = 'black'
+
+    #Planen
+    Rect(10, 10, 5, 480, fill='white')
+    Rect(685, 10, 5, 480, fill='white')
+    Rect(10, 10, 680, 5, fill='white')
+    Rect(10, 485, 680, 5, fill='white')
+
+    #Mittenlinje
+    Line(350.5, 10, 350.5, 485, lineWidth=5, dashes=True, fill='white', visible=visible)
+
+    #Paddlarna
+    leftPaddle = Line(35, 200, 35, 300, lineWidth=10, fill='white', visible=visible)
+    rightPaddle = Line(665, 200, 665, 300, lineWidth=10, fill='white', visible=visible)
+
+    #Bollen
+    ball = centerBoll()
+
+    #Bollens hastighet
+    ball_speed_X = -1
+    ball_speed_Y = -1
+
+    #Score
+    leftScore = Label(0, 180, 50, size=30, fill='white', visible=visible)
+    rightScore = Label(0, 520, 50, size=30, fill='white', visible=visible)
+
+
+init()
 
 
 
