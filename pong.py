@@ -8,24 +8,16 @@ leftPaddle: Line
 rightPaddle: Line
 ball_speed_X: int
 ball_speed_Y: int
-leftScore: Label
-rightScore: Label
 ball: Circle
 to: int
 t1: int
 total: int
-isTimePrinted: bool = False
-name: str
 
 
-def theTime():
-    global isTimePrinted
-    if not isTimePrinted:
-        ball.visible = False
-        t1 = time.time()
-        total = t1 - t0
-        isTimePrinted = True
-        highscore.add(name ,rounded(total))
+def calculateGameTime():
+    t1 = time.time()
+    total = t1 - t0
+    return rounded(total)
 
 #Röra paddlarna
 def onKeyHold(key):
@@ -35,6 +27,37 @@ def onKeyHold(key):
     if leftPaddle.centerY <= 430:
         if 's' in key:
             leftPaddle.centerY += 6
+
+def init():
+    app.stepsPerSecond = 60
+
+    global visible, leftPaddle, rightPaddle, ball_speed_X, ball_speed_Y, ball
+
+    #Bakgrunden
+    app.background = 'black'
+
+    #Synlighet
+    visible = True
+
+    #Planen
+    Rect(10, 10, 5, 480, fill='white')
+    Rect(685, 10, 5, 480, fill='white')
+    Rect(10, 10, 680, 5, fill='white')
+    Rect(10, 485, 680, 5, fill='white')
+
+    #Mittenlinje
+    Line(350.5, 10, 350.5, 485, lineWidth=5, dashes=True, fill='white', visible=visible)
+
+    #Paddlarna
+    leftPaddle = Line(35, 200, 35, 300, lineWidth=10, fill='white', visible=visible)
+    rightPaddle = Line(665, 200, 665, 300, lineWidth=10, fill='white', visible=visible)
+
+    #Bollen
+    ball = centerBoll()
+
+    #Bollens hastighet
+    ball_speed_X = -10
+    ball_speed_Y = -1
 
 def onStep():
     global ball_speed_X, ball_speed_Y, ball, t1, time
@@ -77,46 +100,17 @@ def onStep():
 
     if ball.centerX <= 15:
         rightPaddle.centerY = 250
-        theTime()
+        ball.visible = False
+        name = app.getTextInput('Vad heter du? ')
+        if name == '':
+            app.stop()
+        highscore.add(name , calculateGameTime())
+        init()
 
 def centerBoll():
     return Circle(350, 250, 8, fill='white', visible=visible)
 
-def init():
-    app.stepsPerSecond = 60
 
-    global visible, leftPaddle, rightPaddle, ball_speed_X, ball_speed_Y, leftScore, rightScore, ball
-
-    #Bakgrunden
-    app.background = 'black'
-
-    #Synlighet
-    visible = True
-
-    #Planen
-    Rect(10, 10, 5, 480, fill='white')
-    Rect(685, 10, 5, 480, fill='white')
-    Rect(10, 10, 680, 5, fill='white')
-    Rect(10, 485, 680, 5, fill='white')
-
-    #Mittenlinje
-    Line(350.5, 10, 350.5, 485, lineWidth=5, dashes=True, fill='white', visible=visible)
-
-    #Paddlarna
-    leftPaddle = Line(35, 200, 35, 300, lineWidth=10, fill='white', visible=visible)
-    rightPaddle = Line(665, 200, 665, 300, lineWidth=10, fill='white', visible=visible)
-
-    #Bollen
-    ball = centerBoll()
-
-    #Bollens hastighet
-    ball_speed_X = -10
-    ball_speed_Y = -1
-
-    #Score
-    rightScore = Label(0, 520, 50, size=30, fill='white', visible=False)
-
-init()
 
 def rules():
     global t0
@@ -131,9 +125,8 @@ def rules():
 
 
 def start():
-    global t0, name
+    global t0
     print('Välkommen till ett modifierat pong')
-    name = input('Skriv in ditt namn: ').title().strip()
     time.sleep(1)
     knowRules = input('Vill du veta reglerna? Ja/Nej').lower().strip()
     if knowRules == 'ja':
@@ -143,4 +136,6 @@ def start():
     cmu_graphics.run()
 
 
+
+init()
 start()
