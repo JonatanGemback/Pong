@@ -2,22 +2,13 @@ from cmu_graphics import *
 from cmu_graphics.cmu_graphics import *
 import time
 import highscore
-
+import stopWatch
 
 leftPaddle: Line
 rightPaddle: Line
 ball_speed_X: int
 ball_speed_Y: int
 ball: Circle
-to: int
-t1: int
-total: int
-
-
-def calculateGameTime():
-    t1 = time.time()
-    total = t1 - t0
-    return rounded(total)
 
 #Röra paddlarna
 def onKeyHold(key):
@@ -58,6 +49,9 @@ def init():
     #Bollens hastighet
     ball_speed_X = -10
     ball_speed_Y = -1
+
+    #Startar tiden
+    stopWatch.startTime()
 
 def onStep():
     global ball_speed_X, ball_speed_Y, ball, t1, time
@@ -104,16 +98,13 @@ def onStep():
         name = app.getTextInput('Vad heter du? ')
         if name == '':
             app.stop()
-        highscore.add(name , calculateGameTime())
+        highscore.add(name , stopWatch.stopTime())
         init()
 
 def centerBoll():
     return Circle(350, 250, 8, fill='white', visible=visible)
 
-
-
 def rules():
-    global t0
     print('Du använder "W" för att styra paddeln uppåt och "S" för att styra paddeln neråt')
     time.sleep(1)
     print('Klara dig så länge som möjligt!')
@@ -123,19 +114,14 @@ def rules():
     print('Lycka till!')
     time.sleep(1)
 
-
 def start():
-    global t0
     print('Välkommen till ett modifierat pong')
     time.sleep(1)
     knowRules = input('Vill du veta reglerna? Ja/Nej').lower().strip()
     if knowRules == 'ja':
         rules()
     print('Let´s goo')
-    t0 = time.time()
     cmu_graphics.run()
-
-
 
 init()
 start()
