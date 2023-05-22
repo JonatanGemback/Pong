@@ -1,6 +1,5 @@
 from cmu_graphics import *
 from cmu_graphics.cmu_graphics import *
-#import time
 import highscore
 import stopWatch
 import meny
@@ -45,7 +44,7 @@ def start():
     ball = centerBoll()
 
     #Bollens hastighet
-    ball_speed_X = -10
+    ball_speed_X = -1
     ball_speed_Y = -1
 
     #Startar tiden
@@ -93,10 +92,13 @@ def onStep():
     if ball.centerX <= 15:
         rightPaddle.centerY = 250
         ball.visible = False
+        rightPaddle.visible = False
+        leftPaddle.visible = False
+        time = stopWatch.stopTime()
         name = app.getTextInput('Vad heter du? ')
         if name == '':
             app.stop()
-        highscore.add(name , stopWatch.stopTime())
+        highscore.add(name, time)
         highscore.p(10)
         start()
 

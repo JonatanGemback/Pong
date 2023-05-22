@@ -3,17 +3,20 @@ import highscore
 
 def askWay():
     question = 0
-    while question != '3':
+    while question != '4':
         print('Välkommen!')
         print('1. Vill du se reglerna?')
         print('2. Vill du se topplistan?')
-        print('3. Vill du spela?')
+        print('3. Vill du söka i topplistan?')
+        print('4. Vill du spela?')
         question = input('').strip()
 
         if question == '1':
             rules()
         elif question == '2':
             highscore.p(10)
+        elif question == '3':
+            highscore.search()
 
 
 def rules():

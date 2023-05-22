@@ -32,5 +32,13 @@ def p(listLengt):
         if i > listLengt-1:
             break
         else:
-            print(f"{i+1}. {name}: {total} seconds")
+            print(f"{i+1}. {name}: {total} sekunder")
 
+
+def search():
+    searchedName = input('Vilket namn vill du söka efter?')
+
+    for i, (name, total) in enumerate(high_scores):
+        if searchedName == name:
+            print(f"{i+1}. {name}: {total} sekunder")
+            print('')
