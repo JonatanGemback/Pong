@@ -1,8 +1,9 @@
 from cmu_graphics import *
 from cmu_graphics.cmu_graphics import *
-import time
+#import time
 import highscore
 import stopWatch
+import meny
 
 leftPaddle: Line
 rightPaddle: Line
@@ -19,16 +20,13 @@ def onKeyHold(key):
         if 's' in key:
             leftPaddle.centerY += 6
 
-def init():
+def start():
     app.stepsPerSecond = 60
 
-    global visible, leftPaddle, rightPaddle, ball_speed_X, ball_speed_Y, ball
+    global leftPaddle, rightPaddle, ball_speed_X, ball_speed_Y, ball
 
     #Bakgrunden
     app.background = 'black'
-
-    #Synlighet
-    visible = True
 
     #Planen
     Rect(10, 10, 5, 480, fill='white')
@@ -37,11 +35,11 @@ def init():
     Rect(10, 485, 680, 5, fill='white')
 
     #Mittenlinje
-    Line(350.5, 10, 350.5, 485, lineWidth=5, dashes=True, fill='white', visible=visible)
+    Line(350.5, 10, 350.5, 485, lineWidth=5, dashes=True, fill='white')
 
     #Paddlarna
-    leftPaddle = Line(35, 200, 35, 300, lineWidth=10, fill='white', visible=visible)
-    rightPaddle = Line(665, 200, 665, 300, lineWidth=10, fill='white', visible=visible)
+    leftPaddle = Line(35, 200, 35, 300, lineWidth=10, fill='white')
+    rightPaddle = Line(665, 200, 665, 300, lineWidth=10, fill='white')
 
     #Bollen
     ball = centerBoll()
@@ -54,7 +52,7 @@ def init():
     stopWatch.startTime()
 
 def onStep():
-    global ball_speed_X, ball_speed_Y, ball, t1, time
+    global ball_speed_X, ball_speed_Y, ball
 
     ball.centerX -= ball_speed_X
     ball.centerY += ball_speed_Y
@@ -99,29 +97,16 @@ def onStep():
         if name == '':
             app.stop()
         highscore.add(name , stopWatch.stopTime())
-        init()
+        highscore.p(10)
+        start()
 
 def centerBoll():
-    return Circle(350, 250, 8, fill='white', visible=visible)
+    return Circle(350, 250, 8, fill='white')
 
-def rules():
-    print('Du använder "W" för att styra paddeln uppåt och "S" för att styra paddeln neråt')
-    time.sleep(1)
-    print('Klara dig så länge som möjligt!')
-    time.sleep(1)
-    print('Bollens hastighet kommer att öka efter varje träff!')
-    time.sleep(1)
-    print('Lycka till!')
-    time.sleep(1)
 
-def start():
-    print('Välkommen till ett modifierat pong')
-    time.sleep(1)
-    knowRules = input('Vill du veta reglerna? Ja/Nej').lower().strip()
-    if knowRules == 'ja':
-        rules()
-    print('Let´s goo')
-    cmu_graphics.run()
-
-init()
+highscore.load()
+meny.askWay()
 start()
+
+print('Let´s goo')
+cmu_graphics.run()
