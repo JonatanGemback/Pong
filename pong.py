@@ -1,6 +1,7 @@
 from cmu_graphics import *
 from cmu_graphics.cmu_graphics import *
 import time
+import highscore
 
 
 leftPaddle: Line
@@ -16,15 +17,6 @@ total: int
 isTimePrinted: bool = False
 name: str
 
-high_scores = []
-
-def highscore(total):
-    global high_scores, name
-    high_scores.append((name, total))
-    high_scores.sort(key=lambda x: x[1])
-    print("High Scores:")
-    for i, (name, total) in enumerate(high_scores):
-        print(f"{i+1}. {name}: {total} seconds")
 
 def theTime():
     global isTimePrinted
@@ -33,7 +25,7 @@ def theTime():
         t1 = time.time()
         total = t1 - t0
         isTimePrinted = True
-        highscore(rounded(total))
+        highscore.add(name ,rounded(total))
 
 #Röra paddlarna
 def onKeyHold(key):
@@ -118,7 +110,7 @@ def init():
     ball = centerBoll()
 
     #Bollens hastighet
-    ball_speed_X = -1
+    ball_speed_X = -10
     ball_speed_Y = -1
 
     #Score
